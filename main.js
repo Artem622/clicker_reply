@@ -1,3 +1,26 @@
+function shine(){
+    var posX;
+    var posY;
+    $(".content").mousemove(function(e) {
+        posX = e.pageX - 10;
+        posY = e.pageY - 10;
+    });
+
+    var currCircle = null;
+    $(".content").click(function() {
+        currCircle = $(".content").append(
+            "<div class='circle' style='left:" + posX + "px;top:" + posY + "px;'></div>"
+        );
+
+
+        setTimeout(function() {
+            $("div").remove(currCircle);
+        }, 100);
+
+
+    });
+
+}
 function Timering(){
     const FULL_DASH_ARRAY = 283;
     const WARNING_THRESHOLD = 10;
@@ -116,20 +139,20 @@ function Timering(){
 
 let try1 = 0
 let try2 = 0
+let try3 = 0
 //переход на 2 экран по кнопке + старт таймера + счет кликов
 function test1() {
 
     return new Promise(((resolve,regect) => {document.querySelector("#submit").onclick = function () {
         document.querySelector(".mainbody").style.display = "none"
+        document.querySelector(".rer").style.display = "flex"
 
-        document.querySelector(".test1").style.display = "flex"
         setTimeout(() => {resolve(try1)},10300);
         Timering();
-        document.querySelector("#test1").addEventListener("click", () => {
+        shine()
+        document.querySelector(".rer").addEventListener("click", () => {
             try1 += 1;
-            const image = document.createElement("img")
-            image.src = "rabbit.png"
-            document.querySelector('.test1_childs').appendChild(image)
+
         })
     }
 
@@ -140,8 +163,10 @@ test1()
         data => {
             console.log('test1_countnm ')
             console.log(try1)
+            localStorage.setItem("try1",try1)
+            document.querySelector(".rer").style.display = "none"
             document.querySelector(".mainbody").style.display = "none";
-            document.querySelector(".test1").style.display = "none";
+            document.querySelector(".content").innerHTML = '';
             document.querySelector("#app").style.display = "none";
             document.querySelector(".secondbody").style.display = "flex"
 
@@ -153,18 +178,16 @@ function test2() {
 
     return new Promise(((resolve,regect) => {document.querySelector("#submit1").onclick = function () {
         document.querySelector(".mainbody").style.display = "none"
-        document.querySelector(".test1").style.display = "none";
-        document.querySelector(".secondbody").style.display = "none"
-        document.querySelector(".test2").style.display = "flex"
-        document.querySelector("#app").style.display = "flex"
 
+        document.querySelector(".secondbody").style.display = "none"
+
+        document.querySelector("#app").style.display = "flex"
+        document.querySelector(".rer").style.display = "flex"
         setTimeout(() => {resolve(try2)},10300);
         Timering();
-        document.querySelector("#test2").addEventListener("click", () => {
+        document.querySelector(".rer").addEventListener("click", () => {
             try2 += 1;
-            const image = document.createElement("img")
-            image.src = "rabbit.png"
-            document.querySelector('.test2').appendChild(image)
+
         })
     }
 
@@ -175,10 +198,93 @@ test2()
         data => {
             console.log('test2_countnm ')
             console.log(try2)
-            // document.querySelector(".mainbody").style.display = "none";
-            // document.querySelector(".test1").style.display = "none";
-            // document.querySelector("#app").style.display = "none";
-            // document.querySelector(".secondbody").style.display = "flex"
+            localStorage.setItem("try2",try2)
+            document.querySelector(".rer").style.display = "none"
+            document.querySelector(".mainbody").style.display = "none";
+            document.querySelector("#app").style.display = "none";
+            document.querySelector(".secondbody").style.display = "none"
+            document.querySelector(".thirdbody").style.display = "flex"
+            document.querySelector(".content").innerHTML = '';
         }
     )
 
+function test3() {
+
+    return new Promise(((resolve,regect) => {document.querySelector("#submit2").onclick = function () {
+        document.querySelector(".mainbody").style.display = "none"
+
+        document.querySelector(".secondbody").style.display = "none"
+        document.querySelector(".thirdbody").style.display = "none"
+        document.querySelector(".rer").style.display = "flex"
+        document.querySelector("#app").style.display = "flex"
+
+        setTimeout(() => {resolve(try3)},10300);
+        Timering();
+        document.querySelector(".rer").addEventListener("click", () => {
+            try3 += 1;
+
+        })
+    }
+
+    }));
+}
+test3()
+    .then(
+        data => {
+            try1=parseInt(localStorage.getItem("try1"))
+            try2=parseInt(localStorage.getItem("try2"))
+            let SashaZaebal = Math.round((try1+try2+try3)/3)
+            console.log('test3_countnm ', try3)
+
+            console.log(SashaZaebal)
+            document.querySelector(".rer").style.display = "none"
+            document.querySelector(".mainbody").style.display = "none";
+            document.querySelector("#app").style.display = "none";
+            document.querySelector(".secondbody").style.display = "none";
+            document.querySelector(".thirdbody").style.display = "none";
+            document.querySelector(".content").innerHTML = '';
+            document.querySelector(".finalbody").style.display = "flex"
+            new Chart(document.getElementById("line-chart"), {
+                type: 'line',
+                data: {
+                    labels: [1,2,3],
+                    datasets: [{
+                        data: [try1,try2,try3],
+                        label: "количество кликов за 10 секунд",
+                        borderColor: "#c10c8e",
+                        fill: false,
+                        backgroundColor: "#0bff76",
+
+                    }]
+
+                },
+                options: {
+                    title: {
+                        display: true,
+                        text: 'Твои результаты',
+
+                    }
+                }
+            });
+            // var myHeaders = new Headers();
+            // myHeaders.append("Authorization", "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOjEsInRva2VuVHlwZSI6MiwiYmxvY2tJZCI6MTA0LCJ3ZWVrIjoxLCJpYXQiOjE2NzAzNjY1MTQsImV4cCI6MTY3OTAwNjUxNH0.JQqG8O2TcEcC26B6u2Td2w26f-A-r4T18SG7HHFYoEA");
+            // myHeaders.append("Content-Type", "application/json");
+            //
+            // var raw = JSON.stringify({
+            //     "metric_id": 2,
+            //     "value": SashaZaebal
+            // });
+            //
+            // var requestOptions = {
+            //     method: 'POST',
+            //     headers: myHeaders,
+            //     body: raw,
+            //     redirect: 'follow'
+            // };
+            //
+            // fetch("https://api.psyreply.com/game", requestOptions)
+            //     .then(response => response.text())
+            //     .then(result => console.log(result))
+            //     .catch(error => console.log('error', error));
+        }
+    )
